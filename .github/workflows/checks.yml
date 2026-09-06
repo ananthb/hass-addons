@@ -49,25 +49,58 @@ jobs:
           sys.exit(1 if problems else 0)
           PY
 
-      - name: Every referenced image tag exists
+      - name: Every image an add-on builds on exists
         run: |
           set -euo pipefail
 
-          # Base images, one per architecture, plus the release image
-          # starla's Dockerfile pulls -- which is keyed off the add-on
-          # version, so this is what keeps that version honest. The gate
-          # used to live in ananthb/starla's release workflow, next to
-          # the config.yaml it compared against; the config.yaml is here
-          # now, so the gate is too.
+          # Resolved the way the Supervisor resolves them: read each
+          # Dockerfile's FROM lines and expand them with build.yaml --
+          # ${BUILD_FROM} to one ref per architecture, everything else
+          # from `args`. Deriving the refs instead of listing them means
+          # a new add-on, a new architecture or a new pinned ARG is
+          # covered without touching this workflow.
+          #
+          # starla's pin is the one that has actually broken: its add-on
+          # version and the upstream release it layers on move
+          # independently, so a bump merged ahead of its release used to
+          # fail on someone's Home Assistant box with "failed to resolve
+          # source metadata" rather than here. That check lived in
+          # ananthb/starla's ci.yml next to the build.yaml it read; the
+          # build.yaml is here now, so the check is too.
           mapfile -t refs < <(python3 - <<'PY'
-          import pathlib, yaml
+          import pathlib, re, yaml
 
           refs = set()
-          for build in sorted(pathlib.Path(".").glob("*/build.yaml")):
-              refs |= set(yaml.safe_load(build.read_text()).get("build_from", {}).values())
 
-          version = yaml.safe_load(pathlib.Path("starla/config.yaml").read_text())["version"]
-          refs.add(f"ghcr.io/ananthb/starla:v{version}")
+          for dockerfile in sorted(pathlib.Path(".").glob("*/Dockerfile")):
+              build = yaml.safe_load((dockerfile.parent / "build.yaml").read_text())
+              bases = list(build.get("build_from", {}).values())
+              args = {k: str(v) for k, v in (build.get("args") or {}).items()}
+
+              stages = set()
+              for line in dockerfile.read_text().splitlines():
+                  match = re.match(r"\s*FROM\s+(\S+)(?:\s+AS\s+(\S+))?\s*$", line, re.I)
+                  if not match:
+                      continue
+                  ref, stage = match.group(1), match.group(2)
+                  if stage:
+                      stages.add(stage)
+
+                  # A later FROM may name an earlier stage rather than a registry.
+                  if ref in stages:
+                      continue
+
+                  if "${BUILD_FROM}" in ref:
+                      refs |= {ref.replace("${BUILD_FROM}", base) for base in bases}
+                      continue
+
+                  for name, value in args.items():
+                      ref = ref.replace("${" + name + "}", value)
+
+                  if "$" in ref:
+                      raise SystemExit(f"::error file={dockerfile}::unresolved variable in FROM {ref}")
+
+                  refs.add(ref)
 
           print("\n".join(sorted(refs)))
           PY
@@ -92,7 +125,7 @@ jobs:
             if [ "$code" = 200 ]; then
               echo "ok  $ref"
             else
-              echo "::error::$ref not found on ghcr.io (HTTP $code)"
+              echo "::error::$ref is not published (HTTP $code); release it before pinning it"
               failed=1
             fi
           done
