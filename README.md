@@ -26,5 +26,5 @@ The only thing CI here checks is that the image tag for an add-on actually exist
 
 AGPL-3.0-or-later. See [LICENSE](LICENSE).
 
-The upstream pro keep their own licences: starla is AGPL-3.0-or-later,
+The upstream projects keep their own licences: starla is AGPL-3.0-or-later,
 the Globalping probe is ISC.

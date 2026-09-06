@@ -37,7 +37,31 @@ Option | Default | Description
 ------ | ------- | -----------
 `adoption_token` | *(empty)* | Links the probe to your Globalping account. Leave empty to run an unadopted probe.
 
+## Probe identity
+
+The probe has a UUID, and adopting it binds your account to that UUID. It
+is generated once and kept in `/data`, the only directory the Supervisor
+preserves across restarts, updates and rebuilds — so an adopted probe
+stays adopted.
+
+Upstream keeps it in `/.globalping-probe-uuid`, at the root of the image's
+writable layer, which a Home Assistant add-on discards on every rebuild.
+That produced a new identity on each update and quietly dropped the probe
+out of the account it had been adopted into. This add-on sets
+`GP_PROBE_UUID` instead — upstream's own mechanism for read-only systems —
+so the probe's logic is unchanged.
+
+Uninstalling the add-on deletes `/data` and with it the UUID. Reinstalling
+gives you a new probe that has to be adopted again.
+
 ## Versions and self-update
+
+The add-on version is the upstream probe release plus a fourth component
+for changes to the packaging: `0.52.0.1` is the first add-on revision of
+probe `0.52.0`. It has to be a fourth number rather than the more usual
+`-1` or `-r1` — the Supervisor compares versions with `awesomeversion`,
+which reads a dash as a semver pre-release, so `0.52.0-1` sorts *below*
+`0.52.0` and would never be offered as an update.
 
 `build.yaml` pins the upstream image, so the add-on version tells you
 which release you installed. It does not tell you what is running: the
