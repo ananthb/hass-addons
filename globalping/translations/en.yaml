@@ -1,0 +1,8 @@
+---
+configuration:
+  adoption_token:
+    name: Adoption token
+    description: >-
+      Links this probe to your Globalping account, so it earns credits and
+      can be targeted by name. Copy it from Probes -> Adopt a probe at
+      dash.globalping.io. Leave empty to run an unadopted probe.

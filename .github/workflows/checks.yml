@@ -1,0 +1,100 @@
+name: Checks
+
+# The Supervisor validates almost nothing before a user hits install: a
+# missing option label renders as a bare key, and a Dockerfile naming an
+# image tag that was never published fails on the user's device rather
+# than here. Both are checked below.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  addons:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
+
+      - run: pip install pyyaml
+
+      - name: Option translations cover every option
+        run: python3 check-translations.py
+
+      - name: Slug matches directory name
+        run: |
+          python3 - <<'PY'
+          import pathlib, sys, yaml
+
+          problems = []
+          for config in sorted(pathlib.Path(".").glob("*/config.yaml")):
+              addon = config.parent.name
+              slug = yaml.safe_load(config.read_text()).get("slug")
+              if slug != addon:
+                  problems.append(f"{config}: slug {slug!r} does not match directory {addon!r}")
+
+          for problem in problems:
+              print(f"::error::{problem}")
+          sys.exit(1 if problems else 0)
+          PY
+
+      - name: Every referenced image tag exists
+        run: |
+          set -euo pipefail
+
+          # Base images, one per architecture, plus the release image
+          # starla's Dockerfile pulls -- which is keyed off the add-on
+          # version, so this is what keeps that version honest. The gate
+          # used to live in ananthb/starla's release workflow, next to
+          # the config.yaml it compared against; the config.yaml is here
+          # now, so the gate is too.
+          mapfile -t refs < <(python3 - <<'PY'
+          import pathlib, yaml
+
+          refs = set()
+          for build in sorted(pathlib.Path(".").glob("*/build.yaml")):
+              refs |= set(yaml.safe_load(build.read_text()).get("build_from", {}).values())
+
+          version = yaml.safe_load(pathlib.Path("starla/config.yaml").read_text())["version"]
+          refs.add(f"ghcr.io/ananthb/starla:v{version}")
+
+          print("\n".join(sorted(refs)))
+          PY
+          )
+
+          failed=0
+          for ref in "${refs[@]}"; do
+            case "$ref" in
+              ghcr.io/*) ;;
+              *) echo "::error::$ref is not on ghcr.io; this check only knows that registry"; failed=1; continue ;;
+            esac
+
+            repo="${ref%:*}"; repo="${repo#ghcr.io/}"
+            tag="${ref##*:}"
+
+            token=$(curl -sSf "https://ghcr.io/token?scope=repository:${repo}:pull&service=ghcr.io" | jq -r .token)
+            code=$(curl -sS -o /dev/null -w '%{http_code}' \
+              -H "Authorization: Bearer ${token}" \
+              -H 'Accept: application/vnd.oci.image.index.v1+json,application/vnd.docker.distribution.manifest.list.v2+json,application/vnd.oci.image.manifest.v1+json,application/vnd.docker.distribution.manifest.v2+json' \
+              "https://ghcr.io/v2/${repo}/manifests/${tag}")
+
+            if [ "$code" = 200 ]; then
+              echo "ok  $ref"
+            else
+              echo "::error::$ref not found on ghcr.io (HTTP $code)"
+              failed=1
+            fi
+          done
+
+          exit "$failed"

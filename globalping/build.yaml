@@ -1,0 +1,11 @@
+# The base image IS the upstream probe -- this add-on adds one wrapper
+# script to it and nothing else, so there is no Home Assistant base image
+# underneath and no second copy of node.
+#
+# Pinned rather than :latest so the add-on version above names something
+# real. It is a floor, not a ceiling: the probe self-updates on every
+# start, so a running container is usually ahead of this tag.
+build_from:
+  aarch64: ghcr.io/jsdelivr/globalping-probe:0.52.0
+  amd64: ghcr.io/jsdelivr/globalping-probe:0.52.0
+  armv7: ghcr.io/jsdelivr/globalping-probe:0.52.0

@@ -1,0 +1,24 @@
+name: Globalping
+version: "0.52.0"
+slug: globalping
+description: Globalping network measurement probe
+url: https://globalping.io
+arch:
+  - aarch64
+  - amd64
+  - armv7
+# The upstream image brings its own tini as PID 1, so the Supervisor must
+# not insert s6.
+init: false
+startup: services
+boot: auto
+# Host networking so measurements leave from your real network path
+# instead of Docker's bridge, and so the local adoption listener on 7201
+# is reachable from the dashboard.
+host_network: true
+privileged:
+  - NET_RAW
+options:
+  adoption_token: ""
+schema:
+  adoption_token: str?
