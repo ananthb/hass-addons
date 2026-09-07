@@ -1,0 +1,11 @@
+# The base image IS the upstream airsupply image, built on the Home Assistant
+# base in ananthb/airsupply and published there on every v* tag. This add-on
+# adds one run script to it and nothing else.
+#
+# Pinned to a release tag; the add-on version in config.yaml moves
+# independently. Bump this only once the tag it names has been published --
+# checks.yml refuses a pin that does not resolve, so a mistake fails here
+# rather than on someone's Home Assistant box.
+build_from:
+  aarch64: ghcr.io/ananthb/airsupply:v0.0.1
+  amd64: ghcr.io/ananthb/airsupply:v0.0.1
