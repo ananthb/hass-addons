@@ -40,7 +40,8 @@ has proven it can talk to the machine.
 
 ## The page
 
-Four numbered steps. Each unlocks the next, and the activity log at the bottom
+Four numbered steps. Each unlocks the next, and the activity log at the bottom,
+newest first,
 is the same text as the add-on log, so nothing has to be fished out of
 **Log** any more.
 
