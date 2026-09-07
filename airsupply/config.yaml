@@ -1,5 +1,5 @@
 name: airsupply
-version: "0.0.1"
+version: "0.1.0"
 slug: airsupply
 description: Read a ResMed AirMini CPAP over Bluetooth Classic. A diagnostic, not yet a monitor; it writes nothing.
 url: https://github.com/ananthb/airsupply
@@ -11,6 +11,12 @@ startup: services
 # Manual, not `auto`. This talks to a medical device and does not yet know
 # whether it can; nothing here should start itself on boot until it does.
 boot: manual
+# Everything happens on the page: finding the machine, the Bluetooth bond,
+# pairing, reading. Options carry nothing the page can do better.
+ingress: true
+ingress_port: 8099
+panel_icon: mdi:lungs
+panel_title: airsupply
 # What scyto/ha-bluetooth-audio-manager established is both necessary and
 # sufficient for Bluetooth Classic from an add-on. `udev`, `devices` and
 # `host_network` are deliberately absent: BlueZ is reached over D-Bus, never
@@ -25,15 +31,5 @@ map:
     read_only: false
 options:
   log_level: info
-  address: ""
-  connect: false
-  read: false
-  pin: ""
 schema:
   log_level: list(debug|info|warning|error)
-  address: str?
-  connect: bool
-  read: bool
-  # `password` keeps it out of the log, not out of a backup. The key it buys
-  # is stored under /data and used from then on; clear this afterwards.
-  pin: password?
