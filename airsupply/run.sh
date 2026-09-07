@@ -1,8 +1,6 @@
 #!/usr/bin/with-contenv bashio
 # ==============================================================================
-# airsupply add-on: turn add-on options into environment and start the
-# diagnostic. Nothing here is logged except the version line; the PIN in
-# particular goes into the environment and nowhere else.
+# airsupply add-on: turn add-on options into environment and start the page.
 # ==============================================================================
 set -e
 
@@ -13,13 +11,8 @@ if ! bashio::fs.socket_exists /run/dbus/system_bus_socket; then
 fi
 
 export AIRSUPPLY_LOG_LEVEL="$(bashio::config 'log_level')"
-export AIRSUPPLY_ADDRESS="$(bashio::config 'address')"
-export AIRSUPPLY_CONNECT="$(bashio::config 'connect')"
-export AIRSUPPLY_READ="$(bashio::config 'read')"
-# bashio::config prints the value on stdout, so this assignment is the only
-# place the PIN appears.
-export AIRSUPPLY_PIN="$(bashio::config 'pin')"
+export AIRSUPPLY_PORT=8099
 
-bashio::log.info "airsupply ${AIRSUPPLY_VERSION:-dev} starting."
+bashio::log.info "airsupply ${AIRSUPPLY_VERSION:-dev} starting; open it from the sidebar."
 
 exec python3 -m airsupply

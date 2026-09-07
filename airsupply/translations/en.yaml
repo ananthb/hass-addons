@@ -3,24 +3,3 @@ configuration:
   log_level:
     name: Log level
     description: Verbosity of the add-on log. Use debug when reporting a failed step.
-  address:
-    name: AirMini address
-    description: >-
-      The machine's Bluetooth address (BD_ADDR), as reported by the survey
-      step, e.g. 00:11:22:33:44:55. Leave empty to only survey.
-  connect:
-    name: Open the serial channel
-    description: >-
-      Ask BlueZ for the RFCOMM serial channel to the machine. Leave off until
-      the survey shows the machine with a usable signal.
-  read:
-    name: Pair and read
-    description: >-
-      Run the pairing handshake and read version, clock, settings and run
-      meters. Implies opening the channel. Nothing is written to the machine.
-  pin:
-    name: Pairing PIN
-    description: >-
-      The number the AirMini shows in pairing mode. Needed exactly once; the
-      key it produces is kept in the add-on's data directory and used from
-      then on. Clear this once pairing has succeeded.
