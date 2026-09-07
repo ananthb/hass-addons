@@ -13,6 +13,7 @@ Add-on | Source
 ------ | ------------
 [Starla](starla/DOCS.md) | [ananthb/starla](https://github.com/ananthb/starla).
 [Globalping](globalping/DOCS.md) | [jsdelivr/globalping-probe](https://github.com/jsdelivr/globalping-probe).
+[airsupply](airsupply/DOCS.md) | [ananthb/airsupply](https://github.com/ananthb/airsupply).
 
 
 ## How these are built
@@ -27,4 +28,4 @@ The only thing CI here checks is that the image tag for an add-on actually exist
 AGPL-3.0-or-later. See [LICENSE](LICENSE).
 
 The upstream projects keep their own licences: starla is AGPL-3.0-or-later,
-the Globalping probe is ISC.
+the Globalping probe is ISC, airsupply is GPL-3.0-only.
