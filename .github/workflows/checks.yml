@@ -32,6 +32,29 @@ jobs:
       - name: Option translations cover every option
         run: python3 check-translations.py
 
+      - name: Changelog leads with the add-on version
+        run: |
+          # Home Assistant shows CHANGELOG.md on the add-on page, so a
+          # version bump that forgets it ships with the previous release's
+          # notes on top. Where an add-on keeps a changelog, its first
+          # entry must be the version config.yaml advertises.
+          python3 - <<'PY'
+          import pathlib, re, sys, yaml
+
+          problems = []
+          for changelog in sorted(pathlib.Path(".").glob("*/CHANGELOG.md")):
+              version = str(yaml.safe_load((changelog.parent / "config.yaml").read_text())["version"])
+              headings = re.findall(r"^## +(\S+)", changelog.read_text(), re.M)
+              if not headings:
+                  problems.append(f"{changelog}: no '## <version>' entry")
+              elif headings[0] != version:
+                  problems.append(f"{changelog}: newest entry is {headings[0]}, config.yaml says {version}")
+
+          for problem in problems:
+              print(f"::error::{problem}")
+          sys.exit(1 if problems else 0)
+          PY
+
       - name: Slug matches directory name
         run: |
           python3 - <<'PY'
