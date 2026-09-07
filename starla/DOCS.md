@@ -18,9 +18,8 @@ The add-on image is assembled locally from the signed release image
 ## Registration
 
 On first start the probe generates an SSH keypair in the add-on's
-private data directory. The public key is printed in the add-on log
-(restart the add-on after the first start to see it, or copy it from
-the startup log).
+private data directory. The public key is printed in a banner in the
+add-on log, and repeated every 30 minutes until the probe is registered.
 
 Register your probe at
 [atlas.ripe.net/apply/swprobe](https://atlas.ripe.net/apply/swprobe/)
