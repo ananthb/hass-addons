@@ -63,11 +63,23 @@ from there instead.
 
 ### 2 — Bluetooth bond
 
-The link-layer pairing between the host and the machine, done once. Press
-**Bond over Bluetooth**. BlueZ may ask a question — a PIN, or whether a
-six-digit code matches — and it appears on the page under the button. Answer
-within a minute. What the AirMini actually asks is not yet known; please
-report it.
+The link-layer pairing between the host and the machine, done once.
+
+**Put the AirMini into pairing mode and press Bond within a few seconds of
+it lighting up.** It only answers a connection attempt while it is in pairing
+mode, and it leaves pairing mode on its own — a bond pressed a minute later
+fails with *Page Timeout*, which is Bluetooth for "nothing answered". The
+add-on stops its own scan first and, if Home Assistant has not heard from the
+machine lately, looks for it once more before it tries; both take a few
+seconds, and the activity log says which is happening.
+
+BlueZ may then ask a question — a PIN, or whether a six-digit code matches —
+and it appears on the page under the button. Answer within a minute. What the
+AirMini actually asks is not yet known; please report it.
+
+If it still says the machine never answered, the host is out of range.
+Bluetooth Classic is good for about ten metres, and step 1's signal figure is
+the thing to check.
 
 ### 3 — Pair with the machine and read
 
