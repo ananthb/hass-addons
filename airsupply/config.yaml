@@ -1,17 +1,17 @@
 name: airsupply
-version: "0.3.3"
+version: "0.4.0"
 slug: airsupply
-description: Read a ResMed AirMini CPAP over Bluetooth Classic from a page in the sidebar. It writes nothing.
+description: Monitor a ResMed AirMini CPAP over Bluetooth Classic. Each machine becomes a Home Assistant device belonging to one of your people. It writes nothing to the machine.
 url: https://github.com/ananthb/airsupply
 arch:
   - aarch64
   - amd64
 init: false
 startup: services
-# Manual, not `auto`. The machine takes one Bluetooth connection at a time, so
-# a running add-on is one the phone app cannot have; nothing should claim that
-# on boot until this records something worth the trade.
-boot: manual
+# `auto` now that it records something worth the trade. It still costs the
+# phone app the machine for about ten seconds per read -- the AirMini takes
+# one connection at a time -- which is what `read_every_minutes` is for.
+boot: auto
 # Everything happens on the page: finding the machine, pairing with it and
 # reading. Options carry nothing the page cannot do better.
 ingress: true
@@ -23,6 +23,14 @@ panel_title: airsupply
 # `host_network` are deliberately absent: BlueZ is reached over D-Bus, never
 # through /dev/hci*, so Home Assistant's own BLE scanning is left alone.
 host_dbus: true
+# The core API, to read Home Assistant's list of people so a machine can be
+# said to belong to one. Nothing is published through it; that is MQTT's job.
+homeassistant_api: true
+# `want`, not `need`: without a broker the page still finds, pairs with and
+# reads a machine, and only the publishing is off. A missing broker should not
+# stop somebody reading their own CPAP.
+services:
+  - mqtt:want
 privileged:
   - NET_ADMIN
   - NET_RAW
@@ -32,5 +40,10 @@ map:
     read_only: false
 options:
   log_level: info
+  read_every_minutes: 15
 schema:
   log_level: list(debug|info|warning|error)
+  # The numbers move once a night, so this is about keeping Home Assistant
+  # current rather than about resolution. Every read is a window in which
+  # ResMed's own app cannot have the machine.
+  read_every_minutes: int(5,1440)
