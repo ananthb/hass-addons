@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.5
+
+- Shorter messages, and none of them mention Bluetooth internals.
+
 ## 0.4.4
 
 - The reading is in tabs — Therapy, Meters, Firmware, Clock, and Device for
