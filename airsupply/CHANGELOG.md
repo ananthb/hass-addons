@@ -6,7 +6,7 @@
   last fourteen nights of therapy as bars against the four-hour mark. See the
   README in ananthb/airsupply.
 - `only_owner: true` on the card shows it to the person the machine belongs
-  to and nobody else. It hides the card; it is not a permission.
+  to and nobody else.
 
 ## 0.5.0
 
