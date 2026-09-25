@@ -1,6 +1,14 @@
 # Changelog
 
+## 0.4.2
+
+- Really fixes the page breaking after an update with "the add-on is not
+  answering". 0.4.1 asked your browser not to keep the old page, which does
+  nothing for a browser that already had it; the page's address now carries
+  the version, so an old one cannot be loaded against a new add-on.
+
 ## 0.4.1
+
 
 - The page no longer breaks after an update with "the add-on is not
   answering". Your browser could keep the previous version's page and run it

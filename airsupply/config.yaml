@@ -1,5 +1,5 @@
 name: airsupply
-version: "0.4.1"
+version: "0.4.2"
 slug: airsupply
 description: Monitor a ResMed AirMini CPAP over Bluetooth Classic. Each machine becomes a Home Assistant device belonging to one of your people. It writes nothing to the machine.
 url: https://github.com/ananthb/airsupply
