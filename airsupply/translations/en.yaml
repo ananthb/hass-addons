@@ -3,3 +3,10 @@ configuration:
   log_level:
     name: Log level
     description: Verbosity of the add-on log. Use debug when reporting a failed step.
+  read_every_minutes:
+    name: Read every
+    description: >-
+      Minutes between readings. The machine accepts one connection at a time,
+      so each reading costs ResMed's own app about ten seconds; the numbers
+      only move while somebody is asleep, so there is little to gain from
+      reading often.
