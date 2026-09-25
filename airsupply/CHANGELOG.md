@@ -1,6 +1,16 @@
 # Changelog
 
+## 0.4.1
+
+- The page no longer breaks after an update with "the add-on is not
+  answering". Your browser could keep the previous version's page and run it
+  against the new one; a hard refresh used to be the cure and is no longer
+  needed.
+- The log no longer repeats "Carried 1 machine(s) over from the previous
+  format" for ever.
+
 ## 0.4.0
+
 
 - Several machines, each with its own pairing key and its own readings.
 - Each machine belongs to one of your Home Assistant people, and becomes a
