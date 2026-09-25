@@ -1,6 +1,17 @@
 # Changelog
 
+## 0.4.3
+
+- A wind icon in the sidebar instead of a pair of lungs.
+- The footer is the version and a link to the source, rather than two
+  sentences about itself. Whether it is publishing to Home Assistant is said
+  only when it is not.
+- The activity log stays in its own box: reaching the bottom of it no longer
+  scrolls the page, and it reads newest first so the line you opened it for is
+  the one you can see.
+
 ## 0.4.2
+
 
 - Really fixes the page breaking after an update with "the add-on is not
   answering". 0.4.1 asked your browser not to keep the old page, which does

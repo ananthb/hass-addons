@@ -1,5 +1,5 @@
 name: airsupply
-version: "0.4.2"
+version: "0.4.3"
 slug: airsupply
 description: Monitor a ResMed AirMini CPAP over Bluetooth Classic. Each machine becomes a Home Assistant device belonging to one of your people. It writes nothing to the machine.
 url: https://github.com/ananthb/airsupply
@@ -16,7 +16,7 @@ boot: auto
 # reading. Options carry nothing the page cannot do better.
 ingress: true
 ingress_port: 8099
-panel_icon: mdi:lungs
+panel_icon: mdi:weather-windy
 panel_title: airsupply
 # What scyto/ha-bluetooth-audio-manager established is both necessary and
 # sufficient for Bluetooth Classic from an add-on. `udev`, `devices` and
