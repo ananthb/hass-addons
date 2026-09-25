@@ -1,6 +1,18 @@
 # Changelog
 
+## 0.5.0
+
+- Connections are held open instead of made for each reading. The machine
+  only accepts a connection for a while after it is powered on, so letting go
+  between readings sometimes meant pressing the button on it to get back in.
+- **While airsupply holds a machine, the ResMed app cannot connect to it.**
+  Use **Disconnect** to hand it back; it stays disconnected until you press
+  **Connect**, and the schedule leaves it alone meanwhile.
+- Several machines are held at once. One Bluetooth adapter does all of them.
+- Each machine gets a Connected sensor.
+
 ## 0.4.5
+
 
 - Shorter messages, and none of them mention Bluetooth internals.
 
