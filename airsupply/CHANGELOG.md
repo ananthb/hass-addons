@@ -1,6 +1,18 @@
 # Changelog
 
+## 0.4.4
+
+- The reading is in tabs — Therapy, Meters, Firmware, Clock, and Device for
+  the machine's own details — instead of one long list of everything at once.
+- Switching machines is the machine's name at the top, wherever you are.
+  Adding one is the last entry in that menu.
+- The Bluetooth address moved to the Device tab, along with the signal, both
+  pairings, who the machine belongs to, and Forget.
+- When a machine cannot be reached it says whether it is switched off, out of
+  range, or being used by something else, rather than "see the log".
+
 ## 0.4.3
+
 
 - A wind icon in the sidebar instead of a pair of lungs.
 - The footer is the version and a link to the source, rather than two
