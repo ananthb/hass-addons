@@ -1,5 +1,5 @@
 name: airsupply
-version: "0.3.2"
+version: "0.3.3"
 slug: airsupply
 description: Read a ResMed AirMini CPAP over Bluetooth Classic from a page in the sidebar. It writes nothing.
 url: https://github.com/ananthb/airsupply
