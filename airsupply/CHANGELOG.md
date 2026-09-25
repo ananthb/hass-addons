@@ -1,6 +1,15 @@
 # Changelog
 
+## 0.6.1
+
+- A Lovelace card, installable through HACS as a Dashboard repository: the
+  last fourteen nights of therapy as bars against the four-hour mark. See the
+  README in ananthb/airsupply.
+- `only_owner: true` on the card shows it to the person the machine belongs
+  to and nobody else. It hides the card; it is not a permission.
+
 ## 0.5.0
+
 
 - Connections are held open instead of made for each reading. The machine
   only accepts a connection for a while after it is powered on, so letting go
