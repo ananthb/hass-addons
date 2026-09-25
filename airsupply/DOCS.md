@@ -36,9 +36,10 @@ on the machine. If nothing appears while it is in pairing mode, the host is out
 of range, which is worth knowing early.
 
 **Pair.** The Bluetooth pairing between the host and the machine. Press it
-within a few seconds of the machine lighting up. Bluetooth may ask a question —
-a PIN to type, or a six-digit code to confirm — and it appears on the page.
-What the AirMini actually asks is not yet known; please report what you see.
+within a few seconds of the machine lighting up. On the firmware this has been
+tried against it asks nothing and takes about a second. If yours does ask — a
+PIN to type, or a six-digit code to confirm — the question appears on the page,
+and it is worth reporting, because so far no machine has asked one.
 
 **Connect.** Now the machine's own pairing, which is a different thing: type
 the PIN on its screen. Needed exactly once. What it buys is a key the add-on
